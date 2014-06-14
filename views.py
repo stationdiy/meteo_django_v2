@@ -1,0 +1,42 @@
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+from django.shortcuts import render_to_response
+
+from mysite2 import *
+
+
+import datetime
+
+def current_datetime(request):
+     now = datetime.datetime.now()
+     t = get_template('dateapp/current_datetime.html')
+     html = t.render(Context({'current_date': now}))
+     return HttpResponse(html)
+
+def hello(request):
+     return HttpResponse("eii")
+
+def hours_ahead(request, offset):
+     try:
+        offset = int(offset)
+     except ValueError:
+        raise Http404()
+     dt = datetime.datetime.now() + datetime.timedelta(hours=offset)
+     html = "In %s hour(s), it will be %s." % (offset, dt)
+     return HttpResponse(html)
+
+def search_form(request):
+     return render_to_response('search_form.html')
+
+
+def search(request):
+     if 'q' in request.GET and request.GET['q']:
+	q = request.GET['q']
+	books = Book.objects.filter(title__icontains=q)
+	return render_to_response('search_results.html', {'books': books, 'query': q})
+     else:
+	return HttpResponse('Please submit a search term.')
+
+
+

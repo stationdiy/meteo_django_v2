@@ -1,0 +1,32 @@
+     <html>
+    <head>
+
+    <title>Meteo Stations</title>
+
+    </head>
+    <body>
+    <IMG SRC="logo_meteo.jpeg" WIDTH=400 HEIGHT=120 ALIGN=left><h1>Meteo Station</h1>
+    <br>
+<br>
+<br>
+    <hr/>
+    <table>
+<tr>
+<td><br><br><br>
+
+    <form action=”/search/” method=”get”>
+
+    <input type=text name=q>
+    <input type=submit value=Search>
+    
+   
+    </form></td>
+<td>Celda 2</td>
+
+</tr>
+
+</table> 
+    
+    
+    </body>
+    </html>

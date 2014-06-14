@@ -1,0 +1,39 @@
+from django.conf.urls.defaults import *
+from mysite2.views import *
+from mysite2.meteo.views import *
+from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+admin.autodiscover() 
+
+# Uncomment the next two lines to enable the admin:
+#from django.contrib import admin
+#admin.autodiscover()
+
+urlpatterns = patterns('',
+  
+    url(r'^meteostation/$', meteo_index),
+    url(r'^home-meteo$', meteo_index, name='home'),
+    
+    # Examples:
+    # url(r'^$', 'mysite2.views.home', name='home'),
+    # url(r'^mysite2/', include('mysite2.foo.urls')),
+
+    # Uncomment the admin/doc line below to enable admin documentation:
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    # Uncomment the next line to enable the admin:
+    url(r'^admin/', include(admin.site.urls)),
+    
+
+)
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT}))

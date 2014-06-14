@@ -1,0 +1,185 @@
+{% if tut %}
+<iframe width="950" height="400" src="//www.youtube.com/embed/KOntBbHmXSc?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+{% else %}
+ <div id="map" style="width: 950px; height: 400px;"></div>
+
+   <script type="text/javascript">
+   
+  
+    {% if usuario %}
+    var locations_mines = [
+     {% for mark in stations_mines_act %}
+      ['<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">Mi estación DiY </h2>'+
+    '<div id="bodyContent">'+
+    '<IMG SRC="{{enlace_icono_weather}}" WIDTH=75 HEIGHT=75 ALIGN=left>'+
+    '<p><b>Temperatura:</b> {{mark.0.temperatura}}ºC <br>' +
+    '<b> Humedad: </b>&nbsp;&nbsp;&nbsp; {{mark.0.humedad}}% <br><br>'+ 
+    '<table>'+
+    '    <tr>'+
+    '        <td><a href="/meteostation/?id={{mark.0.MAC}}&act=actioner1"><IMG  SRC="{{mark.1}}" WIDTH=30 HEIGHT=30 ALIGN=left></a></td>'+
+    '        <td><a href="/meteostation/?id={{mark.0.MAC}}&act=actioner2"><IMG  SRC="{{mark.2}}" WIDTH=30 HEIGHT=30 ALIGN=left></a></td>'+
+    '        <td><a href="/meteostation/?id={{mark.0.MAC}}&act=actioner3"><IMG  SRC="{{mark.3}}" WIDTH=30 HEIGHT=30 ALIGN=left></a></td>'+
+    '    </tr>'+
+    '</table><br>'+ 
+    ' &nbsp; &nbsp; &nbsp; &nbsp;'+
+    ' <IMG SRC="/media/minilogo_mapa300x300.jpeg" WIDTH=50 HEIGHT=50 ALIGN=right>'+
+    '<a href="/meteostation/">'+
+    'http://www.DiYStation.com</a><br><br>'+
+    '</div>', {{mark.0.position}}, 8 ],
+     {% endfor %}
+     ];
+    {% endif %}
+         
+    var locations = [
+     {% for mark in stations %}
+      ['<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">Estación DiY de {{mark.username}}</h2>'+
+    '<div id="bodyContent">'+
+    '<IMG SRC="{{enlace_icono_weather}}" WIDTH=75 HEIGHT=75 ALIGN=left>'+
+    '<p><b>Temperatura:</b> {{mark.temperatura}}ºC <br>' +
+    '<b> Humedad: </b>&nbsp;&nbsp;&nbsp;&nbsp; {{mark.humedad}}% <br><br><br><br>'+ 
+    ' <IMG SRC="/media/minilogo_mapa300x300.jpeg" WIDTH=50 HEIGHT=50 ALIGN=right>'+
+    '<a href="/meteostation/">'+
+    'http://www.DiYStation.com</a><br><br>'+
+    '</div>', {{mark.position}}, 8 ],
+     {% endfor %}
+     ];
+     
+    var location_stat_weather= [
+      {% for mark in city_weather %}
+       ['<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">Estación de Weather.com</h2>'+
+    '<h5>{{mark.location.name}}</h5>'+
+    '<div id="bodyContent">'+
+    '<IMG SRC="http://l.yimg.com/a/i/us/we/52/{{mark.current_conditions.icon}}.gif" WIDTH=75 HEIGHT=75 ALIGN=left>'+
+    '<p><b>Temperatura:</b> {{mark.current_conditions.temperature}}ºC <br>' +
+    '<b> Humedad: </b> {{mark.current_conditions.humidity}}% <br><br><br><br>'+ 
+    ' <IMG SRC="/media/minilogo_mapa300x300.jpeg" WIDTH=50 HEIGHT=50 ALIGN=right>'+
+    '<a href="/meteostation/">'+
+    'http://www.DiYStation.com</a><br><br>'+
+    '</div>', {{mark.location.lat}},{{mark.location.lon}}, 8 ],
+     {% endfor %}
+     ];
+    var location_stat_yahoo= 
+      
+       ['<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">{{city_yahoo.title}}</h2>'+
+    '<div id="bodyContent">'+
+    '<IMG SRC="{{enlace_icono_weather}}" WIDTH=75 HEIGHT=75 ALIGN=left>'+
+    '<p><b>Max:</b> {{city_yahoo.forecasts.1.high}}ºC <br>' +
+    '<b>Min: </b> {{city_yahoo.forecasts.1.low}}ºC <br>' +
+    '<b> Humedad: </b> {{city_yahoo.atmosphere.humidity}}% '+ 
+    '<h5>Forecasts</h5> {{html_des.5}} <br>'+
+    '{{html_des.6}} <br> {{html_des.7}} <br> {{html_des.8}}<br> <br>'+  
+    '<a href="/meteostation/" ALIGN=right>'+
+    'http://www.DiYStation.com</a> '+
+    '<IMG SRC="/media/minilogo_mapa300x300.jpeg" WIDTH=50 HEIGHT=50 ALIGN=left>'+
+    '</div> ', {{city_yahoo.geo.lat}},{{city_yahoo.geo.long}}, 8 ];
+    
+   
+    
+    
+    
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng({{lat}}, {{long}}) ,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+    {% if myestaciones %}
+    {% else %}
+     {% if stations %}
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        icon: '/media/stat.png',
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        title: 'Estación DiY',
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      
+     }
+     {% endif %}
+    
+    for (i = 0; i < location_stat_weather.length; i++) {  
+      marker = new google.maps.Marker({
+        icon: '/media/weather_com.png',
+        position: new google.maps.LatLng(location_stat_weather[i][1], location_stat_weather[i][2]),
+        title: 'Estación de Weather.com',
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(location_stat_weather[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      
+     }
+     
+     
+      marker = new google.maps.Marker({
+        icon: '/media/yahoo_com.png',
+        position: new google.maps.LatLng(location_stat_yahoo[1], location_stat_yahoo[2]),
+        title: 'Estación de Yahoo',
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(location_stat_yahoo[0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+     {% endif %} 
+     
+        
+    {% if usuario %}
+    for (i = 0; i < locations_mines.length; i++) {  
+      marker = new google.maps.Marker({
+        icon: '/media/stat_mine.png',
+        position: new google.maps.LatLng(locations[i][1], locations_mines[i][2]),
+        title: 'Mi estación DiY',
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations_mines[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      
+     }    
+    {% endif %}
+
+    
+       
+  </script>
+  <div id="container">
+
+    <a href="/meteostation/?option=0" class="boton">DiY</a>
+    <a href="/meteostation/?option=1" class="boton">Yahoo</a>
+    <a href="/meteostation/?option=2" class="boton">Weather.com</a>
+    <a href="/meteostation/" class="boton">Todas</a>
+
+</div>
+{% endif %}
+

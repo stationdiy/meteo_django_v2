@@ -1,0 +1,25 @@
+<style type="text/css" >
+a.menus {
+	background-color:#44c767;
+	-moz-border-radius:7px;
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	border:10px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:19px;
+	padding:5px 45px;
+	text-decoration:none;
+	text-shadow:0px 1px 3px #2f6627;
+}
+a.menus:hover {
+	background-color:#5cbf2a;
+}
+a.menus:active {
+	position:relative;
+	top:1px;
+}
+
+</style>

@@ -1,0 +1,42 @@
+ {% load static %}
+ <FONT SIZE=2.5>
+ {% if usuario %} 
+   <p>Hola <b>{{usuario|title}}</b>. </p> 
+   {% if no_tienes_stats %}
+   <h5>{{no_tienes_stats}} {{usuario|title}}</h5>  
+   {% endif %}
+ {% endif %}
+ 
+ {% if tut %}
+  {% if usuario %}
+  <a href="/meteostation/?genmac=1" >Genera tu MAC </a> <br>
+
+  {% endif %}
+ {% else %}
+ <a href="/meteostation/?tutorial=1" >Monta tu Estación DiY</a> <br>
+ {% endif %}
+ 
+ {% if loging or newusuario or newstation %}
+ <a href="/meteostation/">Buscar estación</a> <br>
+ {% endif %}
+ 
+ {% if usuario %} 
+  {% if newestacion %}
+  <a href="/meteostation/">Buscar estación</a> <br>
+  {% else %}
+  <a href="/meteostation/?newstat=1">Registrar nueva estación.</a> <br>
+  {% endif %}
+  {% if myestaciones %}
+  {% else %}
+ <a href="/meteostation/?mystats=1">Mis estaciones</a> <br>
+  {% endif %}
+ <a href="/meteostation/?out=1">Logout</a> <br>
+ {% endif %}
+ 
+ {% if loging or newusuario or usuario %}     
+ {% else %}
+ <a href="/meteostation/?inses=1"  >Login</a> <br>
+ <a href="/meteostation/?newuser=1" >Registrate </a> <br><br>
+ {% endif %}
+ 
+ </font>

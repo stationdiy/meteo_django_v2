@@ -1,0 +1,166 @@
+<FONT SIZE=2.5>
+{% if mensaje %}<p>{{mensaje}}</p>{% endif %}
+{% if usuario %}
+ 
+ {% if newestacion %}
+  {% if mensaje_error %}
+  <h5>{{mensaje_error}}</h5>
+  {% else %}
+  <h5> Introduce los datos de tu nueva estación.</h5>
+  {% endif %}
+   <form  action="/meteostation/" method=post>
+    {% csrf_token %}
+   
+        <table>
+            
+            <tr>
+                <td>{{ station_log_form.MAC.label_tag }}</td>
+                <td>{{ station_log_form.MAC }}</td>
+            </tr>
+           
+            <tr>
+                <td>{{ station_log_form.address.label_tag }}</td>
+                <td>{{ station_log_form.address }}</td>
+            </tr>
+            <tr>
+                <td>{{ station_log_form.city.label_tag }}</td>
+                <td>{{ station_log_form.city }}</td>
+            </tr>               
+            <tr>
+                <td>{{ station_log_form.country.label_tag }}</td>
+                <td>{{ station_log_form.country }}</td>
+            </tr>
+         
+        </table><br>
+        
+       <input type=submit name=asociar value=Asociar> 
+    
+  </form>
+ {% else %}
+     
+   {% if query %}
+    <h5>¿Deseas realizar una nueva búsqueda?</h5>
+    <form action="/meteostation/" method=get>
+    <input type=text name=q>
+    <input type=submit value=Buscar> &nbsp; &nbsp; &nbsp; &nbsp;
+    </form> 
+
+    <p>Tu búsqueda para: <strong>{{ query }}</strong></p>
+    <p>Se {% if n_stat > 1 %}han{% else %}ha encontrado {{ n_stat }} {% if n_stat > 1 %}estaciones{% else %}estacion{% endif %} DiY:</p>
+    <ul>
+
+    {% for station in stations %}
+    <li>{{ station.address }}</li>
+    {% endfor %}
+
+    </ul>
+    <p>Estas son todas las estaciones.</p>
+   {% else %}
+    <h5>¿Deseas realizar una búsqueda?</h5>
+    <form action="/meteostation/" method=get>
+    <input type=text name=q>
+    <input type=submit value=Buscar> &nbsp; &nbsp; &nbsp; &nbsp;
+    </form> 
+     
+  {% endif %}  
+
+ {% endif %}
+{% else %}
+ {% if loging %}
+  {% if error_loging %}
+  <h5> {{error_loging}}</h5>
+  {% else %}
+  <h5> Iniciar sesión para poder registrar tu estación.</h5> 
+  {% endif %}
+  <form  action="/meteostation/" method=post>
+    {% csrf_token %}
+   
+        <table>
+            <tr>
+                <td>{{ user_log_form.email.label_tag }}</td>
+                <td>{{ user_log_form.email }}</td>
+            </tr>
+            <tr>
+                <td>{{ user_log_form.password.label_tag }}</td>
+                <td>{{ user_log_form.password }}</td>
+            </tr>
+        </table><br>
+ 
+        <input type="submit" name=log value="Login"/> 
+     &nbsp; &nbsp; &nbsp; &nbsp;
+ </form> 
+   {% if mensaje_log %} <h5>{{ mensaje_log }} </h5> {% endif %} 
+   <a href="/meteostation/?newuser=1"> <h6> Crear un nuevo usuario.</h6></a><br>
+   <h6><font color="#A0A0A0"> Si aún no sabes qué es esto, <a href="/meteostation/?tut=1">visita el tutorial. </font></h6></a>
+ {% else %}
+  {% if newusuario %}
+    {% if user_form.errors %}
+        <p>{{ user_form.errors }}</p>
+    {% endif %}
+    {% if mens_rep_pass_mal %}
+        <p>{{ mens_rep_pass_mal }}</p>
+    {% endif %}
+  <h5> Rellena tus datos de usuario.</h5> 
+   <form  action="/meteostation/" method=post>
+    {% csrf_token %}
+    <table>
+            <tr>
+                <td>{{ user_form.username.label_tag }}</td>
+                <td>{{ user_form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ user_form.email.label_tag }}</td>
+                <td>{{ user_form.email }}</td>
+            </tr>
+            <tr>
+                <td>{{ user_form.password.label_tag }}</td>
+                <td>{{ user_form.password }}</td>
+            </tr>
+            <tr>
+                <td>Repeat password</td>
+                <td><input type=password name=rep_pass></td>
+            </tr>
+    </table><br>
+    <input type="submit" name=crear value="Crear Usuario">
+         
+   </form>  
+  {% else %}
+   {% if query %}
+    <h5>¿Deseas realizar una nueva búsqueda?</h5>
+    <form action="/meteostation/" method=get>
+    <input type=text name=q>
+    <input type=submit value=Buscar> &nbsp; &nbsp; &nbsp; &nbsp;
+    </form> 
+
+    <p>Tu búsqueda para: <strong>{{ query }}</strong></p>
+    <p>Se han encontrado {{ n_stat }} estaciones DiY:</p>
+    <ul>
+
+    {% for station in stations %}
+    <li>{{ station.address }}</li>
+    {% endfor %}
+
+    </ul>
+    <p>Estas son todas las estaciones.</p>
+    {% else %}
+    <h5>¿En donde buscas una estación?</h5>
+    <form action="/meteostation/" method=get>
+     <input type=text name=q>
+     <input type=submit value=Buscar> &nbsp; &nbsp; &nbsp; &nbsp;
+    </form> 
+ 
+    <P ALIGN="justify"><font size=1.5 color="#505050">DiY Station es un un portal donde puedes aprender 
+    a construir una estación meteorológica y conectarla a internet. Podrás situarla 
+    en el mapa y hacer un seguimiento de las variables. También te facilitamos información
+    de Yahoo.com y Weather.com. <br>
+    Además con la extensión hardware, tu DiY Station se convierte en un centro 
+    de control domótico para conectar y desconectar dispositivos de potencia (como pueden ser 
+    calefactores, sistemas de riego, persianas...) <br> Te ofrecemos las herramientas, tu pones la 
+    creatividad </p>
+     
+   {% endif %}  
+  {% endif %}
+ {% endif %}
+{% endif %}
+</font>
+
